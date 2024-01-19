@@ -1,0 +1,30 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ .Chart.Name }}
+spec:
+  template:
+    metadata:
+      name: {{ .Chart.Name }}
+    spec:
+      containers:
+      - image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        name: job-demo
+        env:
+        - name: PERSON
+          value: {{ .Values.env.person | quote }}
+        - name: FILENAME
+          value: {{ .Values.env.filename | quote }}
+        command:
+        - /bin/sh
+        - -c
+        - echo Hey $PERSON! > /mnt/data/$FILENAME
+        volumeMounts:
+        - name: {{ .Values.volumeMounts.name }}
+          mountPath: {{ .Values.volumeMounts.mountPath }}
+      restartPolicy: {{ .Values.restartPolicy }}
+      volumes:
+      - name: {{ .Values.volumes.name }}
+        persistentVolumeClaim:
+          claimName: {{ .Values.volumes.persistentVolumeClaim.claimName }}

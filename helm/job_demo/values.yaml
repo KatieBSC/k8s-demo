@@ -1,0 +1,21 @@
+# Default values for job_demo
+
+image:
+  repository: busybox
+  tag: latest
+  pullPolicy: IfNotPresent
+
+env:
+  person: Jawn Dough
+  filename: demo_file.txt
+
+volumes:
+  name: kt-volume
+  persistentVolumeClaim:
+    claimName: kt-pvc
+
+volumeMounts:
+  name: kt-volume
+  mountPath: /mnt/data
+
+restartPolicy: Never

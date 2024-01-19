@@ -1,0 +1,28 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+ name: kt-job
+spec:
+ template:
+   spec:
+     containers:
+     - name: kt-job
+       image: busybox
+       imagePullPolicy: IfNotPresent
+       env:
+       - name: PERSON
+         value: "kt"
+       - name: FILENAME
+         value: "demo_file.txt"
+       command:
+       - /bin/sh
+       - -c
+       - echo Hey $PERSON! > /mnt/data/$FILENAME
+       volumeMounts:
+       - name: kt-volume
+         mountPath: /mnt/data
+     restartPolicy: Never
+     volumes:
+     - name: kt-volume
+       persistentVolumeClaim:
+         claimName: kt-pvc

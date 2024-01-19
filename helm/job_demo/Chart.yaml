@@ -1,0 +1,4 @@
+apiVersion: v2
+name: job-demo
+description: A Helm chart for Kubernetes Job
+version: 0.1.0

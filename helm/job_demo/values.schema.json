@@ -1,0 +1,28 @@
+{
+    "$schema": "https://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "title": "Values",
+    "required": [
+      "image"
+    ],
+    "properties": {
+      "image": {
+        "type": "object",
+        "required": [
+          "repository",
+          "tag",
+          "pullPolicy"
+        ],
+        "properties": {
+          "repository": {
+            "type": "string",
+            "pattern": "^[a-z0-9-_]+$"
+          },
+          "pullPolicy": {
+            "type": "string",
+            "pattern": "^(Always|Never|IfNotPresent)$"
+          }
+        }
+      }
+    }
+  }
