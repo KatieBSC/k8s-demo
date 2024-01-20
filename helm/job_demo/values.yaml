@@ -19,3 +19,4 @@ volumeMounts:
   mountPath: /mnt/data
 
 restartPolicy: Never
+backoffLimit: 0

@@ -13,13 +13,13 @@ spec:
         name: job-demo
         env:
         - name: PERSON
-          value: {{ .Values.env.person | quote }}
+          value: {{ .Values.env.person | default "Person" | quote }}
         - name: FILENAME
-          value: {{ .Values.env.filename | quote }}
+          value: {{ .Values.env.filename | default "demo_file.txt" | quote }}
         command:
         - /bin/sh
         - -c
-        - echo Hey $PERSON! > /mnt/data/$FILENAME
+        - echo Hey $PERSON! > {{ .Values.volumeMounts.mountPath }}/$FILENAME
         volumeMounts:
         - name: {{ .Values.volumeMounts.name }}
           mountPath: {{ .Values.volumeMounts.mountPath }}
@@ -28,3 +28,6 @@ spec:
       - name: {{ .Values.volumes.name }}
         persistentVolumeClaim:
           claimName: {{ .Values.volumes.persistentVolumeClaim.claimName }}
+  {{ if (eq 0 (int .Values.backoffLimit)) }}
+  backoffLimit: {{ .Values.backoffLimit }}
+  {{ end }}
