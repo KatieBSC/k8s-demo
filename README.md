@@ -13,8 +13,8 @@ and tips for getting started with Helm. See also [Useful Helm commands](#useful-
 
 ## Prerequistes
 
-- Install [minikube](https://minikube.sigs.k8s.io/docs/start/), tested with v1.32.0
-- Install [Helm](https://helm.sh/docs/intro/install/), tested with v3.14.0
+- Install [minikube](https://minikube.sigs.k8s.io/docs/start/) `>= 1.x`
+- Install [Helm](https://helm.sh/docs/intro/install/)`>= 3.x`
 - Optionally install [helm-diff](https://github.com/databus23/helm-diff)
 
 Check installation:
@@ -38,6 +38,15 @@ persistentvolume/kt-volume created
 persistentvolumeclaim/kt-pvc created
 ```
 
+Check out what got created:
+```
+kubectl get pv kt-volume
+```
+
+```
+kubectl get pvc kt-pvc
+```
+
 For more information, check out the [Kubernetes docs](https://kubernetes.io/docs/tasks/configure-pod-container/configure-persistent-volume-storage/) on configuring persistent volume storage.
 
 ## Run Job with kubectl
@@ -49,7 +58,7 @@ kubectl apply -f k8s/job.yaml
 
 Check it out:
 ```
-kubectl get job
+kubectl get job kt-job
 ```
 
 Clean up:
