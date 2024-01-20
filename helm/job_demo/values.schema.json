@@ -1,28 +1,102 @@
 {
-    "$schema": "https://json-schema.org/draft-07/schema#",
-    "type": "object",
-    "title": "Values",
-    "required": [
-      "image"
-    ],
-    "properties": {
-      "image": {
-        "type": "object",
-        "required": [
-          "repository",
-          "tag",
-          "pullPolicy"
-        ],
-        "properties": {
-          "repository": {
-            "type": "string",
-            "pattern": "^[a-z0-9-_]+$"
-          },
-          "pullPolicy": {
-            "type": "string",
-            "pattern": "^(Always|Never|IfNotPresent)$"
+  "$schema": "https://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "title": "Values",
+  "required": [
+    "image",
+    "volumes",
+    "volumeMounts",
+    "restartPolicy"
+  ],
+  "properties": {
+    "image": {
+      "type": "object",
+      "required": [
+        "repository",
+        "tag",
+        "pullPolicy"
+      ],
+      "properties": {
+        "repository": {
+          "type": "string",
+          "pattern": "^[a-z0-9-_]+$"
+        },
+        "pullPolicy": {
+          "type": "string",
+          "enum": [
+            "Always",
+            "Never",
+            "IfNotPresent"
+          ]
+        }
+      }
+    },
+    "env": {
+      "type": "object",
+      "properties": {
+        "person": {
+          "type": "string",
+          "pattern": "^[a-zA-Z\\s]+$"
+        },
+        "filename": {
+          "type": "string",
+          "pattern": "^[a-z0-9-_]+.txt$"
+        }
+      }
+    },
+    "volumes": {
+      "type": "object",
+      "required": [
+        "name",
+        "persistentVolumeClaim"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "pattern": "^[a-z-]+$"
+        },
+        "persistentVolumeClaim": {
+          "type": "object",
+          "required": [
+            "claimName"
+          ],
+          "properties": {
+            "claimName": {
+              "type": "string",
+              "pattern": "^[a-z-]+$"
+            }
           }
         }
       }
+    },
+    "volumeMounts": {
+      "type": "object",
+      "required": [
+        "name",
+        "mountPath"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "pattern": "^[a-z-]+$"
+        },
+        "mountPath": {
+          "type": "string",
+          "pattern": "^\/[a-z-\/]+"
+        }
+      }
+    },
+    "restartPolicy": {
+      "type": "string",
+      "enum": [
+        "Always",
+        "OnFailure",
+        "Never"
+      ]
+    },
+    "backoffLimit": {
+      "type": "integer",
+      "minimum": 0
     }
   }
+}
