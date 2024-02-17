@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: demo-app-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: demo-app
+  template:
+    metadata:
+      labels:
+        app: demo-app
+    spec:
+      containers:
+      - name: demo-app
+        image: kt-demo-app
+        imagePullPolicy: Never
+        env:
+        - name: MOUNT_PATH
+          value: "/mnt/data"
+        ports:
+        - containerPort: 8501
+        volumeMounts:
+          - mountPath: "/mnt/data"
+            name: demo-app-volume
+      volumes:
+        - name: demo-app-volume
+          persistentVolumeClaim:
+            claimName: kt-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: demo-app-service
+spec:
+  type: ClusterIP
+  ports:
+    - targetPort: 8501
+      port: 8501
+  selector:
+    app: demo-app
