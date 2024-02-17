@@ -8,8 +8,8 @@ This project contains examples of how to use Helm to deploy a [Job](#job-example
 These examples aim to provide an introduction to some common use cases and tips for getting 
 started with Kubernetes and Helm. See also [Useful Helm commands](#useful-helm-commands).
 
-- [`k8s`](./k8s): Contains examples to create a PersistentVolume, PersistentVolumeClaim, Job, Pod that uses your PersistentVolumeClaim as a volume, ... fixme
-- [`helm`](./helm): Contains examples to create a Helm chart for a job ... fixme
+- [`k8s`](./k8s): Contains examples to create a PersistentVolume, PersistentVolumeClaim, Job, Pod that uses your PersistentVolumeClaim as a volume, Service, Deployment
+- [`helm`](./helm): Contains examples to create a Helm chart for a job
 - [`app`](./app): Contains example code to create a Streamlit app
 
 ## Prerequistes
