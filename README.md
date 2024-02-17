@@ -2,14 +2,15 @@
 
 ## Description
 
-This project contains examples of a Kubernetes job which writes an output
-to a volume.
+This project contains examples of how to use Helm to deploy a [Job](#job-example) and an 
+[App](#app-example) with Kubernetes in the comfort of your own local environment using minikube.
 
-These examples aim to provide an introduction to a common use case for Kubernetes Jobs
-and tips for getting started with Helm. See also [Useful Helm commands](#useful-helm-commands).
+These examples aim to provide an introduction to some common use cases and tips for getting 
+started with Kubernetes and Helm. See also [Useful Helm commands](#useful-helm-commands).
 
-- [`k8s`](./k8s): Contains examples to create a PersistentVolume, PersistentVolumeClaim, Job, Pod that uses your PersistentVolumeClaim as a volume
-- [`helm`](./helm): Contains examples to create a Helm chart for a job
+- [`k8s`](./k8s): Contains examples to create a PersistentVolume, PersistentVolumeClaim, Job, Pod that uses your PersistentVolumeClaim as a volume, ... fixme
+- [`helm`](./helm): Contains examples to create a Helm chart for a job ... fixme
+- [`app`](./app): Contains example code to create a Streamlit app
 
 ## Prerequistes
 
@@ -26,7 +27,11 @@ which minikube
 which helm
 ```
 
-## Create storage
+## Job Example
+
+This is an example of a Kubernetes job which writes an output to a volume.
+
+### Create storage
 
 The following command will create a PersistentVolume and PersistentVolumeClaim:
 ```
@@ -49,7 +54,7 @@ kubectl get pvc kt-pvc
 
 For more information, check out the [Kubernetes docs](https://kubernetes.io/docs/tasks/configure-pod-container/configure-persistent-volume-storage/) on configuring persistent volume storage.
 
-## Run Job with kubectl
+### Run Job with kubectl
 
 The following will run a Kubernetes job which writes to the volume that was previously created:
 ```
@@ -66,7 +71,7 @@ Clean up:
 kubectl delete job kt-job
 ```
 
-## Check out the file
+### Check out the file
 
 We can use a task pod which uses the PersistentVolumeClaim as a volume.
 ```
@@ -93,7 +98,7 @@ Clean up:
 kubectl delete pod task-pv-pod
 ```
 
-## Run Job with Helm
+### Run Job with Helm
 
 We can also use Helm to run the same job. This will make our job easier to customize,
 such as changing the environment variables, container image, and other job specs.
@@ -120,8 +125,57 @@ kubectl delete job job-demo
 
 To check out the file that updated / created, see [Check out the file](#check-out-the-file).
 
+## App Example
 
-## Useful Helm commands
+This is an example of a Kubernetes Service and Deployment for a Streamlit app,
+which builds on the PV and PVC created in the previous section.
+
+### Build
+
+Point your terminal to use the docker daemon inside minikube:
+```
+eval $(minikube docker-env)
+```
+Build Docker image:
+```
+docker build -t kt-demo-app .
+```
+
+### Deploy with kubectl
+
+Create the Service and Deployment:
+```
+kubectl apply -f k8s/service.yaml
+```
+Check out the resources:
+```
+kubectl get deployments
+kubectl get replicaset
+kubectl get service demo-app-service
+```
+
+### Check out the app
+
+Since we are using `spec.type: ClusterIP`, we will use port forwarding to access
+the application in the minikube cluster.
+```
+kubectl port-forward deployment/demo-app-deployment 8080:8501
+```
+
+Head over to [localhost:8080](http://127.0.0.1:8080) to try it out for yourself:
+
+![image](./assets/image.png)
+
+We can interact with the App running in our local cluster in order to write to and read
+from a file in the mounted volume. Nice!
+
+Clean up:
+```
+kubectl delete deployment demo-app-deployment
+kubectl delete service demo-app-service
+```
+
+### Useful Helm commands
 
 Below are a few commands that are helpful for working with Helm charts.
 
