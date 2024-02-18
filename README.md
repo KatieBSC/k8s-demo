@@ -8,7 +8,7 @@ This project contains examples of how to use Helm to deploy a [Job](#job-example
 These examples aim to provide an introduction to some common use cases and tips for getting 
 started with Kubernetes and Helm. See also [Useful Helm commands](#useful-helm-commands).
 
-- [`k8s`](./k8s): Contains examples to create a PersistentVolume, PersistentVolumeClaim, Job, Pod that uses your PersistentVolumeClaim as a volume, Service, Deployment
+- [`k8s`](./k8s): Contains examples to create a PersistentVolume, PersistentVolumeClaim, Job, helper Pod, Service, Deployment
 - [`helm`](./helm): Contains Helm charts for app-demo, job-demo
 - [`app`](./app): Contains example code to create a Streamlit app
 
@@ -174,8 +174,8 @@ kubectl delete deployment,services -l app=app-demo
 
 ### Deploy App with Helm
 
-We can also use Helm to deploy the Streamlit app. This will make our job easier to customize,
-such as changing the environment variables, container image, and other job specs.
+We can also use Helm to deploy the Streamlit app. This will make it easier to customize our app,
+such as changing the environment variables, container image, and other deployment or service specs.
 
 Install / upgrade `app-demo` Helm chart with default values:
 ```
