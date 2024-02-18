@@ -9,7 +9,7 @@ These examples aim to provide an introduction to some common use cases and tips 
 started with Kubernetes and Helm. See also [Useful Helm commands](#useful-helm-commands).
 
 - [`k8s`](./k8s): Contains examples to create a PersistentVolume, PersistentVolumeClaim, Job, Pod that uses your PersistentVolumeClaim as a volume, Service, Deployment
-- [`helm`](./helm): Contains examples to create a Helm chart for a job
+- [`helm`](./helm): Contains Helm charts for app-demo, job-demo
 - [`app`](./app): Contains example code to create a Streamlit app
 
 ## Prerequistes
@@ -63,12 +63,12 @@ kubectl apply -f k8s/job.yaml
 
 Check it out:
 ```
-kubectl get job kt-job
+kubectl get job job-demo
 ```
 
 Clean up:
 ```
-kubectl delete job kt-job
+kubectl delete job job-demo
 ```
 
 ### Check out the file
@@ -138,7 +138,7 @@ eval $(minikube docker-env)
 ```
 Build Docker image:
 ```
-docker build -t kt-demo-app .
+docker build -t kt-app-demo .
 ```
 
 ### Deploy with kubectl
@@ -149,9 +149,7 @@ kubectl apply -f k8s/service.yaml
 ```
 Check out the resources:
 ```
-kubectl get deployments
-kubectl get replicaset
-kubectl get service demo-app-service
+kubectl get deployment,service,replicaset -l app=app-demo 
 ```
 
 ### Check out the app
@@ -159,7 +157,7 @@ kubectl get service demo-app-service
 Since we are using `spec.type: ClusterIP`, we will use port forwarding to access
 the application in the minikube cluster.
 ```
-kubectl port-forward deployment/demo-app-deployment 8080:8501
+kubectl port-forward deployment/app-demo-deployment 8080:8501
 ```
 
 Head over to [localhost:8080](http://127.0.0.1:8080) to try it out for yourself:
@@ -171,9 +169,25 @@ from a file in the mounted volume. Nice!
 
 Clean up:
 ```
-kubectl delete deployment demo-app-deployment
-kubectl delete service demo-app-service
+kubectl delete deployment,services -l app=app-demo 
 ```
+
+### Deploy App with Helm
+
+We can also use Helm to deploy the Streamlit app. This will make our job easier to customize,
+such as changing the environment variables, container image, and other job specs.
+
+Install / upgrade `app-demo` Helm chart with default values:
+```
+helm upgrade app-demo helm/app_demo/ -i
+```
+
+Check out the resources that got created:
+```
+kubectl get deployment,service,replicaset -l app=app-demo
+```
+
+To try out the app in your browser, see [Check out the app](#check-out-the-app).
 
 ### Useful Helm commands
 
@@ -183,6 +197,10 @@ Below are a few commands that are helpful for working with Helm charts.
 Render chart template and display the output:
 ```
 helm template helm/job_demo/ 
+```
+with `--release-name`
+```
+helm template --release-name app-demo helm/app_demo
 ```
 
 Check the chart for possible issues:

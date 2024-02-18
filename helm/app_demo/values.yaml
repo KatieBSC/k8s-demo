@@ -1,0 +1,36 @@
+# Default values for app_demo.
+
+replicaCount: 1
+
+image:
+  repository: kt-app-demo
+  pullPolicy: Never
+  tag: latest
+
+nameOverride: ""
+fullnameOverride: ""
+
+podAnnotations: {}
+podLabels: {}
+
+service:
+  type: ClusterIP
+  port: 8501
+  targetPort: 8501
+
+resources:
+  limits:
+    cpu: 100m
+    memory: 128Mi
+  requests:
+    cpu: 100m
+    memory: 128Mi
+
+volumes: 
+  - name: app-demo-volume
+    persistentVolumeClaim:
+      claimName: kt-pvc
+
+volumeMounts:
+  - name: app-demo-volume
+    mountPath: "/mnt/data"
