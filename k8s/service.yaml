@@ -1,20 +1,22 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: demo-app-deployment
+  name: app-demo-deployment
+  labels:
+    app: app-demo
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: demo-app
+      app: app-demo
   template:
     metadata:
       labels:
-        app: demo-app
+        app: app-demo
     spec:
       containers:
-      - name: demo-app
-        image: kt-demo-app
+      - name: app-demo
+        image: kt-app-demo
         imagePullPolicy: Never
         env:
         - name: MOUNT_PATH
@@ -23,20 +25,24 @@ spec:
         - containerPort: 8501
         volumeMounts:
           - mountPath: "/mnt/data"
-            name: demo-app-volume
+            name: app-demo-volume
       volumes:
-        - name: demo-app-volume
+        - name: app-demo-volume
           persistentVolumeClaim:
             claimName: kt-pvc
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: demo-app-service
+  name: app-demo-service
+  labels:
+    app: app-demo
 spec:
   type: ClusterIP
+  # port is used to listen for incoming traffic from external clients
+  # targetPort is the Service's internal communication port with the pods responsible for handling that traffic
   ports:
     - targetPort: 8501
       port: 8501
   selector:
-    app: demo-app
+    app: app-demo
